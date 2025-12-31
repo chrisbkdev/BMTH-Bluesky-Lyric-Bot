@@ -1,0 +1,41 @@
+name: Post BMTH Lyric
+
+on:
+  schedule:
+    # Run every hour at minute 0
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    
+    - name: Restore posted lyrics cache
+      uses: actions/cache@v3
+      id: cache
+      with:
+        path: posted_lyrics.pkl
+        key: posted-lyrics-${{ runner.os }}
+        restore-keys: |
+          posted-lyrics-${{ runner.os }}
+    
+    - name: Post lyric to Bluesky
+      env:
+        BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+        BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+      run: |
+        python post_lyric.py
+
