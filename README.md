@@ -70,6 +70,43 @@ nohup python bot.py > bot.log 2>&1 &
 
 Or use a process manager like `pm2` or `supervisor`.
 
+## Running on GitHub Actions (Recommended for 24/7 Operation)
+
+GitHub Actions can run your bot automatically every hour without needing a server running 24/7.
+
+### Setup Steps:
+
+1. **Push your code to GitHub** (if you haven't already)
+
+2. **Add Secrets to GitHub Repository:**
+   - Go to your repository on GitHub
+   - Click **Settings** → **Secrets and variables** → **Actions**
+   - Click **New repository secret**
+   - Add two secrets:
+     - `BLUESKY_HANDLE`: Your Bluesky handle (e.g., `yourname.bsky.social`)
+     - `BLUESKY_PASSWORD`: Your Bluesky app password
+
+3. **Enable GitHub Actions:**
+   - The workflow file (`.github/workflows/post-lyric.yml`) is already included
+   - GitHub Actions will automatically run the workflow every hour
+   - You can also manually trigger it from the **Actions** tab
+
+### How It Works:
+
+- GitHub Actions runs `post_lyric.py` (a one-shot version of the bot) every hour
+- It uses GitHub Actions cache to remember which lyrics have been posted
+- No server needed - runs entirely on GitHub's infrastructure
+- Free for public repositories (with usage limits)
+
+### Manual Testing:
+
+You can test the workflow manually:
+1. Go to the **Actions** tab in your GitHub repository
+2. Select **Post BMTH Lyric** workflow
+3. Click **Run workflow** → **Run workflow**
+
+**Note:** The workflow runs on a schedule (`0 * * * *` = every hour at minute 0). GitHub Actions may have slight delays, but it will run reliably.
+
 ## Customizing Lyrics
 
 Edit `lyrics.json` to add or modify songs and lyrics. The format is:
