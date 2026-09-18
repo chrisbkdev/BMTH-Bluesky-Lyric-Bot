@@ -6,7 +6,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from atproto import Client
 
-# Load environment variables
+# Load environment variables 
 load_dotenv()
 
 def load_lyrics():
